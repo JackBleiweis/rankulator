@@ -1,0 +1,185 @@
+.container {
+  margin-bottom: 12px;
+  padding: 12px 16px;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  border-radius: 8px;
+  border: 1px solid #dee2e6;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.batchInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+
+  strong {
+    font-size: 14px;
+    color: #333;
+  }
+}
+
+.phaseIndicator {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.progressText {
+  font-size: 12px;
+  font-weight: 600;
+  color: #666;
+}
+
+.progressBarContainer {
+  position: relative;
+  height: 8px;
+  margin-bottom: 8px;
+  border-radius: 4px;
+  overflow: hidden;
+  background-color: #e9ecef;
+}
+
+.phaseSegments {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+}
+
+.phaseSegment {
+  position: absolute;
+  height: 100%;
+  opacity: 0.3;
+
+  &.exploration {
+    background-color: #ff9800;
+  }
+
+  &.mixed {
+    background-color: #2196f3;
+  }
+
+  &.refinement {
+    background-color: #4caf50;
+  }
+}
+
+.progressBar {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background-color: transparent;
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.6s ease-out, background-color 0.3s ease;
+  position: relative;
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.3) 50%,
+      transparent 100%
+    );
+    animation: shimmer 2s infinite;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.phaseDescription {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 4px;
+  font-size: 14px;
+  color: #555;
+  font-weight: 500;
+  border-top: 1px solid #e9ecef;
+  padding-top: 8px;
+}
+
+.phaseDescriptionContent {
+  flex: 1;
+}
+
+.phaseIcon {
+  font-size: 14px;
+}
+
+.instructions {
+  font-size: 14px;
+  text-align: center;
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .container {
+    padding: 15px;
+  }
+
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .progressText {
+    align-self: flex-end;
+    font-size: 12px;
+  }
+
+  .batchInfo strong {
+    font-size: 14px;
+  }
+
+  .phaseIndicator {
+    font-size: 11px;
+  }
+}
+
+// Animation for when progress updates
+.progressFill {
+  &.updating {
+    animation: pulse 0.3s ease-in-out;
+  }
+}
+
+@keyframes pulse {
+  0% {
+    transform: scaleY(1);
+  }
+  50% {
+    transform: scaleY(1.1);
+  }
+  100% {
+    transform: scaleY(1);
+  }
+}

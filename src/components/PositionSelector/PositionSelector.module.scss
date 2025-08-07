@@ -1,0 +1,78 @@
+.container {
+  padding: 40px;
+  text-align: center;
+}
+
+.title {
+  margin-bottom: 0;
+  color: #333;
+}
+
+.subtitle {
+  font-size: 18px;
+  color: #666;
+  margin-bottom: 40px;
+}
+
+.sectionHeader {
+  margin-bottom: 30px;
+
+  h2 {
+    margin-bottom: 10px;
+    color: #333;
+  }
+
+  p {
+    color: #666;
+    margin-bottom: 20px;
+  }
+}
+
+.positionButtons {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.positionButton {
+  padding: 20px 30px;
+  font-size: 18px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  min-width: 150px;
+  transition: background-color 0.2s ease;
+
+  &.active {
+    background-color: #4caf50;
+    color: white;
+
+    &:hover:not(:disabled) {
+      background-color: #45a049;
+    }
+  }
+
+  &.disabled {
+    background-color: #ccc;
+    color: #666;
+    cursor: not-allowed;
+  }
+
+  small {
+    display: block;
+    font-size: 12px;
+    margin-top: 4px;
+  }
+}
+
+.errorMessage {
+  margin-top: 20px;
+  padding: 15px;
+  background-color: #ffebee;
+  border: 1px solid #f44336;
+  border-radius: 4px;
+  color: #c62828;
+  max-width: 500px;
+  margin: 20px auto;
+}
