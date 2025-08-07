@@ -6,6 +6,7 @@ import PlayerCard from './components/PlayerCard/PlayerCard';
 import FinalRankings from './components/FinalRankings/FinalRankings';
 import LoadingScreen from './components/LoadingScreen/LoadingScreen';
 import RankulatorTitle from './components/RankulatorTitle/RankulatorTitle';
+import { GameSettings } from './components/Settings/Settings';
 import styles from './App.module.scss';
 
 interface Player {
@@ -35,11 +36,19 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string>('');
   
-  // Configuration
-  const BATCH_SIZE = 6;
-  const EXPLORATION_BATCHES = 5;
-  const MIXED_BATCHES = 5;
-  const REFINEMENT_BATCHES = 5;
+  // Game settings with defaults
+  const [gameSettings, setGameSettings] = useState<GameSettings>({
+    batchSize: 6,
+    explorationBatches: 5,
+    mixedBatches: 5,
+    refinementBatches: 5
+  });
+  
+  // Derived values from settings
+  const BATCH_SIZE = gameSettings.batchSize;
+  const EXPLORATION_BATCHES = gameSettings.explorationBatches;
+  const MIXED_BATCHES = gameSettings.mixedBatches;
+  const REFINEMENT_BATCHES = gameSettings.refinementBatches;
   const TOTAL_BATCHES = EXPLORATION_BATCHES + MIXED_BATCHES + REFINEMENT_BATCHES;
 
   // Handle position selection and load player data
@@ -177,32 +186,43 @@ function App() {
   // Render appropriate phase
   if (gamePhase === 'position-select') {
     return (
-      <PositionSelector
-        onPositionSelect={handlePositionSelect}
-        loading={loading}
-        selectedPosition={selectedPosition}
-        error={error}
-      />
+      <div className={styles.app}>
+        <PositionSelector
+          onPositionSelect={handlePositionSelect}
+          loading={loading}
+          selectedPosition={selectedPosition}
+          error={error}
+          onSettingsChange={setGameSettings}
+          currentSettings={gameSettings}
+        />
+      </div>
     );
   }
 
   if (gamePhase === 'loading') {
-    return <LoadingScreen selectedPosition={selectedPosition} />;
+    return (
+      <div className={styles.app}>
+        <LoadingScreen selectedPosition={selectedPosition} />
+      </div>
+    );
   }
 
   if (gamePhase === 'complete') {
     return (
-      <FinalRankings
-        players={players}
-        selectedPosition={selectedPosition}
-        totalBatches={TOTAL_BATCHES}
-        onReset={resetGame}
-      />
+      <div className={styles.app}>
+        <FinalRankings
+          players={players}
+          selectedPosition={selectedPosition}
+          totalBatches={TOTAL_BATCHES}
+          onReset={resetGame}
+        />
+      </div>
     );
   }
 
   // Active ranking phase
   return (
+    <div className={styles.app}>
     <div className={styles.rankingContainer}>
       <div className={styles.rankingHeader}>
         <RankulatorTitle />
@@ -251,6 +271,7 @@ function App() {
           Start Over
         </button>
       </div>
+    </div>
     </div>
   );
 }

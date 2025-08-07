@@ -1,17 +1,61 @@
 .container {
   padding: 40px;
   text-align: center;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.header {
+  margin-bottom: 40px;
+}
+
+.titleSection {
+  text-align: center;
 }
 
 .title {
   margin-bottom: 0;
   color: #333;
+  font-size: 32px;
+  font-weight: 700;
 }
 
 .subtitle {
   font-size: 18px;
   color: #666;
-  margin-bottom: 40px;
+  margin: 8px 0 0 0;
+}
+
+.settingsButton {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  border: 2px solid #e9ecef;
+  border-radius: 12px;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 28px;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  z-index: 100;
+
+  &:hover {
+    background: linear-gradient(135deg, #e9ecef 0%, #dee2e6 100%);
+    border-color: #dee2e6;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
 }
 
 .sectionHeader {

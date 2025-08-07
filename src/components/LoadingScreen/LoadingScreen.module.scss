@@ -1,6 +1,10 @@
 .container {
   padding: 40px;
   text-align: center;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 
   h1 {
     margin-bottom: 40px;

@@ -1,5 +1,5 @@
-import React from 'react';
-import RankulatorTitle from '../RankulatorTitle/RankulatorTitle';
+import React, { useState } from 'react';
+import Settings, { GameSettings } from '../Settings/Settings';
 import styles from './PositionSelector.module.scss';
 
 interface PositionSelectorProps {
@@ -7,20 +7,51 @@ interface PositionSelectorProps {
   loading: boolean;
   selectedPosition: string;
   error?: string;
+  onSettingsChange?: (settings: GameSettings) => void;
+  currentSettings?: GameSettings;
 }
 
 const PositionSelector: React.FC<PositionSelectorProps> = ({
   onPositionSelect,
   loading,
   selectedPosition,
-  error
+  error,
+  onSettingsChange,
+  currentSettings
 }) => {
+  const [showSettings, setShowSettings] = useState(false);
+
+  const defaultSettings: GameSettings = {
+    batchSize: 6,
+    explorationBatches: 5,
+    mixedBatches: 5,
+    refinementBatches: 5
+  };
+
+  const handleSettingsChange = (settings: GameSettings) => {
+    if (onSettingsChange) {
+      onSettingsChange(settings);
+    }
+  };
+
   return (
-    <div className={styles.container}>
-      <RankulatorTitle />
-      <p className={styles.subtitle}>
-        Find your favorite players through elimination rounds!
-      </p>
+    <>
+      <div className={styles.container}>
+        <div className={styles.header}>
+          <div className={styles.titleSection}>
+            <h1 className={styles.title}>🏈 Rankulator</h1>
+            <p className={styles.subtitle}>
+              Find your favorite players through elimination rounds!
+            </p>
+          </div>
+          <button 
+            className={styles.settingsButton}
+            onClick={() => setShowSettings(true)}
+            title="Customize ranking settings"
+          >
+            ⚙️
+          </button>
+        </div>
       
       <div className={styles.sectionHeader}>
         <h2>Select Position to Rank</h2>
@@ -67,12 +98,20 @@ const PositionSelector: React.FC<PositionSelectorProps> = ({
         </button>
       </div>
       
-      {error && (
-        <div className={styles.errorMessage}>
-          {error}
-        </div>
-      )}
-    </div>
+              {error && (
+          <div className={styles.errorMessage}>
+            {error}
+          </div>
+        )}
+
+        <Settings
+          isOpen={showSettings}
+          onClose={() => setShowSettings(false)}
+          onSave={handleSettingsChange}
+          currentSettings={currentSettings || defaultSettings}
+        />
+      </div>
+    </>
   );
 };
 

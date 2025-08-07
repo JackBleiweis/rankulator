@@ -1,3 +1,26 @@
+// Global CSS Reset for body margins
+:global(body) {
+  margin: 0;
+  padding: 0;
+}
+
+// Global App Background
+.app {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  background-attachment: fixed;
+}
+
+// Alternative soft backgrounds (commented out)
+// Option 1: Subtle warm gradient
+// background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+
+// Option 2: Cool blue-gray
+// background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+
+// Option 3: Very subtle gray
+// background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+
 // Styles moved to individual components
 
 // Active Ranking Phase
