@@ -1,12 +1,106 @@
 .container {
   padding: 40px;
   min-height: 100vh;
+}
 
-  h1,
-  h2,
-  h3 {
-    margin-bottom: 20px;
+.headerSection {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.mainTitle {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  position: relative;
+  margin: 0 0 12px 0;
+}
+
+.titleIcon {
+  font-size: 48px;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
+  animation: gentle-bounce 2s ease-in-out infinite;
+}
+
+@keyframes gentle-bounce {
+  0%,
+  100% {
+    transform: translateY(0);
   }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+.titleText {
+  font-size: 42px;
+  font-weight: 800;
+  letter-spacing: -1px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  -webkit-text-fill-color: transparent;
+}
+
+.titleSubtext {
+  font-size: 24px;
+  font-weight: 500;
+  opacity: 0.8;
+  margin: 0;
+}
+
+.completionBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
+  color: white;
+  padding: 12px 24px;
+  border-radius: 25px;
+  box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+  font-weight: 600;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.2),
+      transparent
+    );
+    animation: shimmer 3s infinite;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+.badgeIcon {
+  font-size: 18px;
+}
+
+.badgeText {
+  font-size: 16px;
+}
+
+.badgeDetail {
+  font-size: 14px;
+  opacity: 0.9;
+  font-weight: 400;
 }
 
 // Button styles for components used within InformationCard
@@ -36,32 +130,6 @@
     outline: 2px solid #2196f3;
     outline-offset: 2px;
   }
-}
-
-.toggleLabel {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  cursor: pointer;
-  font-size: 14px;
-  font-weight: 500;
-  color: #333;
-  transition: color 0.2s ease;
-
-  &:hover {
-    color: #2196f3;
-  }
-}
-
-.toggleCheckbox {
-  width: 18px;
-  height: 18px;
-  accent-color: #2196f3;
-  cursor: pointer;
-}
-
-.toggleText {
-  user-select: none;
 }
 
 .tieringInfo {
@@ -126,25 +194,75 @@
   align-items: center;
   justify-content: space-between;
   margin-bottom: 16px;
-  padding: 12px 20px;
+  padding: 16px 24px;
   background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
   border-radius: 12px;
   border-left: 4px solid #dee2e6;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(0, 0, 0, 0.1),
+      transparent
+    );
+  }
 }
 
 .tierLabel {
   margin: 0;
   font-size: 18px;
   font-weight: 700;
-  color: #333;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 20px;
+  background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+  color: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  position: relative;
+  overflow: hidden;
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.2),
+      transparent
+    );
+    transition: left 0.5s ease;
+  }
+
+  &:hover::after {
+    left: 100%;
+  }
 }
 
 .tierCount {
   font-size: 14px;
   color: #666;
-  font-style: italic;
+  font-weight: 500;
+  background: rgba(255, 255, 255, 0.7);
+  padding: 4px 12px;
+  border-radius: 20px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .tierPlayers {
@@ -153,50 +271,109 @@
   gap: 8px;
 }
 
-// Tier-specific colors
+// Tier-specific colors - Green (best) to Red (worst) progression
 .tier1 {
-  border-left-color: #ffd700 !important;
-  background: linear-gradient(135deg, #fff9c4 0%, #ffeaa7 100%) !important;
+  border-left-color: #10b981 !important;
+  background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%) !important;
 
   .tierLabel {
-    color: #b8860b;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: white;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+
+    &::after {
+      background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.4),
+        transparent
+      );
+    }
+  }
+
+  .tierCount {
+    background: linear-gradient(135deg, #10b981 0%, #a7f3d0 100%);
+    color: #065f46;
+    border-color: #10b981;
+    font-weight: 600;
   }
 }
 
 .tier2 {
-  border-left-color: #c0c0c0 !important;
-  background: linear-gradient(135deg, #f1f2f6 0%, #ddd6fe 100%) !important;
+  border-left-color: #84cc16 !important;
+  background: linear-gradient(135deg, #ecfccb 0%, #d9f99d 100%) !important;
 
   .tierLabel {
-    color: #6366f1;
+    background: linear-gradient(135deg, #84cc16 0%, #65a30d 100%);
+    color: white;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 4px 15px rgba(132, 204, 22, 0.4);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+  }
+
+  .tierCount {
+    background: linear-gradient(135deg, #84cc16 0%, #d9f99d 100%);
+    color: #365314;
+    border-color: #84cc16;
   }
 }
 
 .tier3 {
-  border-left-color: #cd7f32 !important;
-  background: linear-gradient(135deg, #fed7aa 0%, #fdba74 100%) !important;
+  border-left-color: #eab308 !important;
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%) !important;
 
   .tierLabel {
-    color: #c2410c;
+    background: linear-gradient(135deg, #eab308 0%, #ca8a04 100%);
+    color: white;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 4px 15px rgba(234, 179, 8, 0.4);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+  }
+
+  .tierCount {
+    background: linear-gradient(135deg, #eab308 0%, #fde68a 100%);
+    color: #713f12;
+    border-color: #eab308;
   }
 }
 
 .tier4 {
-  border-left-color: #22c55e !important;
-  background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%) !important;
+  border-left-color: #f97316 !important;
+  background: linear-gradient(135deg, #fed7aa 0%, #fdba74 100%) !important;
 
   .tierLabel {
-    color: #15803d;
+    background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+    color: white;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 4px 15px rgba(249, 115, 22, 0.4);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+  }
+
+  .tierCount {
+    background: linear-gradient(135deg, #f97316 0%, #fdba74 100%);
+    color: #9a3412;
+    border-color: #f97316;
   }
 }
 
 .tier5 {
-  border-left-color: #3b82f6 !important;
-  background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%) !important;
+  border-left-color: #dc2626 !important;
+  background: linear-gradient(135deg, #fecaca 0%, #fca5a5 100%) !important;
 
   .tierLabel {
-    color: #1d4ed8;
+    background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+    color: white;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 4px 15px rgba(220, 38, 38, 0.4);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+  }
+
+  .tierCount {
+    background: linear-gradient(135deg, #dc2626 0%, #fca5a5 100%);
+    color: #7f1d1d;
+    border-color: #dc2626;
   }
 }
 

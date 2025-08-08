@@ -36,7 +36,7 @@ const FinalRankings: React.FC<FinalRankingsProps> = ({
   onReset
 }) => {
   const [showTieringModal, setShowTieringModal] = useState(false);
-  const [showPlayerScores, setShowPlayerScores] = useState(true);
+  const [showPlayerScores, setShowPlayerScores] = useState(false);
   const createTiers = (players: Player[]): PlayerWithTier[] => {
     if (players.length === 0) return [];
     
@@ -55,14 +55,14 @@ const FinalRankings: React.FC<FinalRankingsProps> = ({
     // Sort by z-score (highest first)
     const sortedPlayers = [...playersWithZScores].sort((a, b) => b.zScore - a.zScore);
     
-    // Tier configuration with z-score thresholds
-    const TIER_CONFIG = [
-      { label: 'Elite', minZ: 1.0, maxZ: Infinity, softCap: 4 },
-      { label: 'Tier 1', minZ: 0.3, maxZ: 1.0, softCap: 8 },
-      { label: 'Tier 2', minZ: -0.3, maxZ: 0.3, softCap: 10 },
-      { label: 'Tier 3', minZ: -1.0, maxZ: -0.3, softCap: 10 },
-      { label: 'Tier 4', minZ: -Infinity, maxZ: -1.0, softCap: 12 }
-    ];
+          // Tier configuration with z-score thresholds
+      const TIER_CONFIG = [
+        { label: '🏆 Elite', minZ: 1.0, maxZ: Infinity, softCap: 4 },
+        { label: '🥇 Tier 1', minZ: 0.3, maxZ: 1.0, softCap: 8 },
+        { label: '👍 Tier 2', minZ: -0.3, maxZ: 0.3, softCap: 10 },
+        { label: '👎 Tier 3', minZ: -1.0, maxZ: -0.3, softCap: 10 },
+        { label: '💩 Tier 4', minZ: -Infinity, maxZ: -1.0, softCap: 12 }
+      ];
     
     const FUZZY_THRESHOLD = 0.1; // For soft boundaries
     const playersWithTiers: PlayerWithTier[] = [];
@@ -228,8 +228,17 @@ const FinalRankings: React.FC<FinalRankingsProps> = ({
 
   return (
     <div className={styles.container}>
-      <h1>🏈 Rankulator - Final Rankings</h1>
-      <h2>Game Complete! ({totalBatches} batches)</h2>
+      <div className={styles.headerSection}>
+        <h1 className={styles.mainTitle}>
+          <span className={styles.titleIcon}>🏆</span>
+          <span className={styles.titleText}>Rankulator</span>
+        </h1>
+        <div className={styles.completionBadge}>
+          <span className={styles.badgeIcon}>✅</span>
+          <span className={styles.badgeText}>Game Complete!</span>
+          <span className={styles.badgeDetail}>({totalBatches} batches)</span>
+        </div>
+      </div>
       
             <InformationCard
         description="Your players have been intelligently grouped into tiers based on your ranking preferences. Each tier represents players of similar relative value according to your selections throughout the ranking process."
@@ -239,17 +248,8 @@ const FinalRankings: React.FC<FinalRankingsProps> = ({
           className={styles.infoButton}
           onClick={() => setShowTieringModal(true)}
         >
-          📊 How Tiering Works
+          📊 How Tiering Works & Settings
         </button>
-        <label className={styles.toggleLabel}>
-          <input
-            type="checkbox"
-            checked={showPlayerScores}
-            onChange={(e) => setShowPlayerScores(e.target.checked)}
-            className={styles.toggleCheckbox}
-          />
-          <span className={styles.toggleText}>Show Scores</span>
-        </label>
       </InformationCard>
       
       <div className={styles.rankingsList}>
@@ -290,6 +290,8 @@ const FinalRankings: React.FC<FinalRankingsProps> = ({
       <TieringInfoModal
         isOpen={showTieringModal}
         onClose={() => setShowTieringModal(false)}
+        showPlayerScores={showPlayerScores}
+        onToggleScores={setShowPlayerScores}
       />
     </div>
   );

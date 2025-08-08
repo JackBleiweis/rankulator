@@ -5,9 +5,11 @@ import styles from './TieringInfoModal.module.scss';
 interface TieringInfoModalProps {
   isOpen: boolean;
   onClose: () => void;
+  showPlayerScores: boolean;
+  onToggleScores: (show: boolean) => void;
 }
 
-const TieringInfoModal: React.FC<TieringInfoModalProps> = ({ isOpen, onClose }) => {
+const TieringInfoModal: React.FC<TieringInfoModalProps> = ({ isOpen, onClose, showPlayerScores, onToggleScores }) => {
   return (
     <Modal
       isOpen={isOpen}
@@ -71,6 +73,21 @@ const TieringInfoModal: React.FC<TieringInfoModalProps> = ({ isOpen, onClose }) 
           not just arbitrary score ranges. Players in the same tier have genuinely similar value according 
           to your ranking choices.
         </p>
+      </div>
+
+      <div className={styles.section}>
+        <h4>⚙️ Display Settings</h4>
+        <div className={styles.settingsGroup}>
+          <label className={styles.toggleLabel}>
+            <input
+              type="checkbox"
+              checked={showPlayerScores}
+              onChange={(e) => onToggleScores(e.target.checked)}
+              className={styles.toggleCheckbox}
+            />
+            <span className={styles.toggleText}>Show player scores in rankings</span>
+          </label>
+        </div>
       </div>
     </Modal>
   );
