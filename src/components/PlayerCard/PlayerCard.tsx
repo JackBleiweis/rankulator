@@ -11,6 +11,7 @@ interface Player {
   age: number | null;
   score: number;
   playerHeadshotLink: string | null;
+  zScore?: number;
 }
 
 interface PlayerCardProps {
@@ -20,6 +21,10 @@ interface PlayerCardProps {
   variant?: 'ranking' | 'final';
   rank?: number;
   isTopThree?: boolean;
+  tier?: number;
+  tierLabel?: string;
+  isElite?: boolean;
+  showScore?: boolean;
 }
 
 const PlayerCard: React.FC<PlayerCardProps> = ({
@@ -28,7 +33,11 @@ const PlayerCard: React.FC<PlayerCardProps> = ({
   onClick,
   variant = 'ranking',
   rank,
-  isTopThree = false
+  isTopThree = false,
+  tier,
+  tierLabel,
+  isElite = false,
+  showScore = true
 }) => {
   const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
     const target = e.target as HTMLImageElement;
@@ -39,7 +48,7 @@ const PlayerCard: React.FC<PlayerCardProps> = ({
 
   if (variant === 'final') {
     return (
-      <div className={`${styles.finalCard} ${isTopThree ? styles.topThree : ''}`}>
+      <div className={`${styles.finalCard} ${isElite ? styles.elite : ''} ${tier ? styles[`tier${tier}`] : ''}`}>
         <div className={styles.playerInfo}>
           {player.playerHeadshotLink ? (
             <img 
@@ -57,7 +66,7 @@ const PlayerCard: React.FC<PlayerCardProps> = ({
           </div>
           
           <div className={styles.playerContent}>
-            <strong>#{rank}: {player.name}</strong>
+            <strong>{player.name}</strong>
             {player.team && (
               <div className={styles.teamName}>{player.team}</div>
             )}
@@ -66,9 +75,11 @@ const PlayerCard: React.FC<PlayerCardProps> = ({
             </small>
           </div>
         </div>
-        <div className={styles.playerScore}>
-          <strong>Score: {player.score}</strong>
-        </div>
+        {showScore && (
+          <div className={styles.playerScore}>
+            <strong>Score: {player.score}</strong>
+          </div>
+        )}
       </div>
     );
   }

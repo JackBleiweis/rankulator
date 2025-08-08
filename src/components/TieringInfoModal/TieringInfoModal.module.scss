@@ -1,0 +1,76 @@
+.section {
+  margin-bottom: 28px;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  h4 {
+    color: #333;
+    margin-bottom: 12px;
+    font-size: 16px;
+    font-weight: 600;
+  }
+
+  p {
+    color: #555;
+    line-height: 1.6;
+    margin-bottom: 12px;
+  }
+}
+
+.tierDefinitions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.tierDef {
+  display: grid;
+  grid-template-columns: 80px 140px 1fr;
+  gap: 12px;
+  padding: 12px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  align-items: center;
+
+  @media (max-width: 600px) {
+    grid-template-columns: 1fr;
+    gap: 4px;
+  }
+}
+
+.tierName {
+  font-weight: 600;
+  color: #2196f3;
+  font-size: 14px;
+}
+
+.tierRange {
+  font-family: "Courier New", monospace;
+  color: #666;
+  font-size: 13px;
+  background: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.tierDesc {
+  color: #555;
+  font-size: 13px;
+}
+
+.featureList {
+  margin: 0;
+  padding-left: 20px;
+
+  li {
+    margin-bottom: 8px;
+    color: #555;
+    line-height: 1.5;
+
+    strong {
+      color: #333;
+    }
+  }
+}
