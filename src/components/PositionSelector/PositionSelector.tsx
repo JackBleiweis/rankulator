@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { GameSettings } from '../Settings/Settings';
 import styles from './PositionSelector.module.scss';
+import RankulatorTitle from '../RankulatorTitle/RankulatorTitle';
 
 interface PositionSelectorProps {
   onPositionSelect: (position: string, playerCount: number, gameSettings: GameSettings) => void;
@@ -112,11 +113,17 @@ const PositionSelector: React.FC<PositionSelectorProps> = ({
   const currentConfig = tempSelectedPosition ? POSITION_CONFIG[tempSelectedPosition as keyof typeof POSITION_CONFIG] : null;
   const currentPreset = PRESET_CONFIG[selectedPreset];
 
+  const getPresetName = (playerCount: number) => {
+    if (playerCount <= 12) return 'Quick';
+    if (playerCount <= 24) return 'Normal';
+    return 'Extensive';
+  };
+
   return (
     <div className={styles.container}>
       <div className={styles.header}>
         <div className={styles.titleSection}>
-          <h1 className={styles.title}>🏈 Rankulator</h1>
+          <RankulatorTitle />
           <p className={styles.subtitle}>
             Find your favorite players through elimination rounds!
           </p>
@@ -184,7 +191,8 @@ const PositionSelector: React.FC<PositionSelectorProps> = ({
           <div className={styles.presetsSection}>
             <div className={styles.presetsHeader}>
               <h3>Ranking Intensity</h3>
-              <p>Choose how thorough you want your ranking process to be</p>
+              <p style={{ marginBottom: '4px' }}>Choose how thorough you want your ranking process to be</p>
+              <p>With {playerCount} players, we recommend the <strong>{getPresetName(playerCount)}</strong> preset.</p>
             </div>
 
             <div className={styles.presetOptions}>

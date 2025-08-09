@@ -1,0 +1,255 @@
+.welcomeContent {
+  padding: 8px 0;
+}
+
+.heroSection {
+  text-align: center;
+  margin-bottom: 32px;
+
+  .heroIcon {
+    font-size: 48px;
+    margin-bottom: 16px;
+    display: block;
+  }
+
+  h3 {
+    font-size: 24px;
+    font-weight: 700;
+    color: #1a202c;
+    margin-bottom: 12px;
+    line-height: 1.3;
+  }
+
+  .heroText {
+    font-size: 16px;
+    color: #4a5568;
+    line-height: 1.6;
+    max-width: 480px;
+    margin: 0 auto;
+  }
+}
+
+.howItWorks {
+  margin: 0 !important;
+
+  h4 {
+    font-size: 18px;
+    font-weight: 600;
+    color: #2d3748;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .stepsList {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+
+  .step {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 16px;
+    background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+
+    .stepNumber {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
+      color: white;
+      border-radius: 50%;
+      font-weight: 700;
+      font-size: 14px;
+      flex-shrink: 0;
+    }
+
+    .stepContent {
+      flex: 1;
+
+      strong {
+        display: block;
+        font-size: 15px;
+        font-weight: 600;
+        color: #2d3748;
+        margin-bottom: 4px;
+      }
+
+      p {
+        font-size: 14px;
+        color: #4a5568;
+        line-height: 1.4;
+        margin: 0;
+      }
+    }
+  }
+}
+
+.features {
+  margin-bottom: 32px;
+
+  h4 {
+    font-size: 18px;
+    font-weight: 600;
+    color: #2d3748;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .featuresList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    li {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      font-size: 14px;
+      line-height: 1.5;
+      color: #4a5568;
+
+      &::before {
+        content: "✓";
+        color: #48bb78;
+        font-weight: 700;
+        flex-shrink: 0;
+        margin-top: 1px;
+      }
+
+      strong {
+        color: #2d3748;
+      }
+    }
+  }
+}
+
+.ctaSection {
+  text-align: center;
+  padding: 24px;
+  background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+
+  .ctaText {
+    font-size: 16px;
+    color: #4a5568;
+    line-height: 1.5;
+    margin-bottom: 20px;
+
+    strong {
+      color: #2d3748;
+    }
+  }
+
+  .ctaButton {
+    background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(66, 153, 225, 0.3);
+
+    &:hover {
+      background: linear-gradient(135deg, #3182ce 0%, #2c5282 100%);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 16px rgba(66, 153, 225, 0.4);
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+
+    &:focus {
+      outline: 2px solid #4299e1;
+      outline-offset: 2px;
+    }
+  }
+}
+
+// Mobile optimizations
+@media (max-width: 768px) {
+  .heroSection {
+    margin-bottom: 24px;
+
+    .heroIcon {
+      font-size: 40px;
+      margin-bottom: 12px;
+    }
+
+    h3 {
+      font-size: 20px;
+      margin-bottom: 8px;
+    }
+
+    .heroText {
+      font-size: 15px;
+    }
+  }
+
+  .howItWorks,
+  .features {
+    margin-bottom: 24px;
+
+    h4 {
+      font-size: 16px;
+      margin-bottom: 12px;
+    }
+  }
+
+  .step {
+    padding: 12px;
+    gap: 12px;
+
+    .stepNumber {
+      width: 28px;
+      height: 28px;
+      font-size: 13px;
+    }
+
+    .stepContent {
+      strong {
+        font-size: 14px;
+      }
+
+      p {
+        font-size: 13px;
+      }
+    }
+  }
+
+  .featuresList li {
+    font-size: 13px;
+  }
+
+  .ctaSection {
+    padding: 20px 12px 8px;
+
+    .ctaText {
+      font-size: 15px;
+      margin-bottom: 16px;
+    }
+
+    .ctaButton {
+      padding: 10px 20px;
+      font-size: 15px;
+    }
+  }
+}

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PlayerDataFetcher from './utils/playerDataFetcher';
 import BatchProgress from './components/BatchProgress/BatchProgress';
 import PositionSelector from './components/PositionSelector/PositionSelector';
@@ -6,6 +6,7 @@ import PlayerCard from './components/PlayerCard/PlayerCard';
 import FinalRankings from './components/FinalRankings/FinalRankings';
 import LoadingScreen from './components/LoadingScreen/LoadingScreen';
 import RankulatorTitle from './components/RankulatorTitle/RankulatorTitle';
+import WelcomeModal from './components/WelcomeModal/WelcomeModal';
 import { GameSettings } from './components/Settings/Settings';
 import styles from './App.module.scss';
 
@@ -28,7 +29,22 @@ type GamePhase = 'position-select' | 'loading' | 'ranking' | 'complete';
 
 function App() {
   const [gamePhase, setGamePhase] = useState<GamePhase>('position-select');
+  const [showWelcomeModal, setShowWelcomeModal] = useState(false);
   const [selectedPosition, setSelectedPosition] = useState<string>('');
+
+  // Check if this is the user's first visit
+  useEffect(() => {
+    const hasVisitedBefore = localStorage.getItem('rankulator_visited');
+    if (!hasVisitedBefore) {
+      setShowWelcomeModal(true);
+    }
+  }, []);
+
+  // Handle welcome modal close
+  const handleWelcomeClose = () => {
+    localStorage.setItem('rankulator_visited', 'true');
+    setShowWelcomeModal(false);
+  };
   const [players, setPlayers] = useState<Player[]>([]);
   const [currentBatch, setCurrentBatch] = useState<Player[]>([]);
   const [selectedPlayers, setSelectedPlayers] = useState<string[]>([]);
@@ -194,6 +210,10 @@ function App() {
           selectedPosition={selectedPosition}
           error={error}
         />
+        <WelcomeModal 
+          isOpen={showWelcomeModal}
+          onClose={handleWelcomeClose}
+        />
       </div>
     );
   }
@@ -202,6 +222,10 @@ function App() {
     return (
       <div className={styles.app}>
         <LoadingScreen selectedPosition={selectedPosition} />
+        <WelcomeModal 
+          isOpen={showWelcomeModal}
+          onClose={handleWelcomeClose}
+        />
       </div>
     );
   }
@@ -214,6 +238,10 @@ function App() {
           selectedPosition={selectedPosition}
           totalBatches={TOTAL_BATCHES}
           onReset={resetGame}
+        />
+        <WelcomeModal 
+          isOpen={showWelcomeModal}
+          onClose={handleWelcomeClose}
         />
       </div>
     );
@@ -271,6 +299,10 @@ function App() {
         </button>
       </div>
     </div>
+      <WelcomeModal 
+        isOpen={showWelcomeModal}
+        onClose={handleWelcomeClose}
+      />
     </div>
   );
 }
