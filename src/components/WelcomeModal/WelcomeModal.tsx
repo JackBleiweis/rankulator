@@ -1,5 +1,6 @@
 import React from 'react';
 import Modal from '../Modal/Modal';
+import StepComponent from '../common/StepComponent/StepComponent';
 import styles from './WelcomeModal.module.scss';
 
 interface WelcomeModalProps {
@@ -19,27 +20,21 @@ const WelcomeModal: React.FC<WelcomeModalProps> = ({ isOpen, onClose }) => {
         <div className={styles.howItWorks}>
           <h4>🚀 How It Works</h4>
           <div className={styles.stepsList}>
-            <div className={styles.step}>
-              <span className={styles.stepNumber}>1</span>
-              <div className={styles.stepContent}>
-                <strong>Choose Your Position</strong>
-                <p>Select QB, RB, WR, or TE to start ranking</p>
-              </div>
-            </div>
-            <div className={styles.step}>
-              <span className={styles.stepNumber}>2</span>
-              <div className={styles.stepContent}>
-                <strong>Make Simple Choices</strong>
-                <p>We'll show you small batches of players - just pick the ones you like</p>
-              </div>
-            </div>
-            <div className={styles.step}>
-              <span className={styles.stepNumber}>3</span>
-              <div className={styles.stepContent}>
-                <strong>Get Smart Tiers</strong>
-                <p>Our algorithm creates statistically-based tiers that reflect your true preferences</p>
-              </div>
-            </div>
+            <StepComponent
+              stepNumber={1}
+              title="Choose Your Position"
+              description="Select QB, RB, WR, or TE to start ranking"
+            />
+            <StepComponent
+              stepNumber={2}
+              title="Make Simple Choices"
+              description="We'll show you small batches of players - just pick the ones you like"
+            />
+            <StepComponent
+              stepNumber={3}
+              title="Get Smart Tiers"
+              description="Our algorithm creates statistically-based tiers that reflect your true preferences"
+            />
           </div>
         </div>
 

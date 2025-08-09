@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { GameSettings } from '../Settings/Settings';
 import { POSITION_CONFIG, PositionKey } from '../../config/positionConfig';
 import { PRESET_CONFIG, PresetKey } from '../../config/presetConfig';
+import PresetButton from '../common/PresetButton/PresetButton';
 import styles from './PositionSelector.module.scss';
 import RankulatorTitle from '../RankulatorTitle/RankulatorTitle';
 
@@ -136,26 +137,18 @@ const PositionSelector: React.FC<PositionSelectorProps> = ({
               {Object.entries(PRESET_CONFIG)
                 .filter(([key]) => key !== 'psycho' || psychoModeUnlocked)
                 .map(([key, preset]) => (
-                <label key={key} className={`${styles.presetOption} ${key === 'psycho' ? styles.psychoOption : ''}`}>
-                  <input
-                    type="radio"
-                    name="preset"
-                    value={key}
-                    checked={selectedPreset === key}
-                    onChange={() => handlePresetChange(key as PresetKey)}
-                    className={styles.presetRadio}
-                  />
-                  <div className={`${styles.presetCard} ${key === 'psycho' ? styles.psychoCard : ''}`}>
-                    <div className={styles.presetIcon}>{preset.icon}</div>
-                    <div className={styles.presetContent}>
-                      <div className={styles.presetName}>
-                        {preset.name}
-                        {key === 'psycho' && <span className={styles.unlockedBadge}>UNLOCKED!</span>}
-                      </div>
-                      <div className={styles.presetDesc}>{preset.description}</div>
-                    </div>
-                  </div>
-                </label>
+                <PresetButton
+                  key={key}
+                  presetKey={key as PresetKey}
+                  name={preset.name}
+                  icon={preset.icon}
+                  description={preset.description}
+                  isSelected={selectedPreset === key}
+                  isPsycho={key === 'psycho'}
+                  showUnlockedLabel={key === 'psycho'}
+                  onClick={handlePresetChange}
+                  type="radio"
+                />
               ))}
             </div>
           </div>

@@ -1,18 +1,6 @@
 import React from 'react';
+import { Player } from '../../types';
 import styles from './PlayerCard.module.scss';
-
-interface Player {
-  id: string;
-  name: string;
-  position: string;
-  team: string | null;
-  college: string;
-  yearsExp: number;
-  age: number | null;
-  score: number;
-  playerHeadshotLink: string | null;
-  zScore?: number;
-}
 
 interface PlayerCardProps {
   player: Player;

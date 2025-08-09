@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { PRESET_CONFIG, PresetKey } from '../../config/presetConfig';
+import PresetButton from '../common/PresetButton/PresetButton';
 import styles from './Settings.module.scss';
 
 interface SettingsProps {
@@ -88,18 +89,17 @@ const Settings: React.FC<SettingsProps> = ({
               {Object.entries(PRESET_CONFIG)
                 .filter(([key]) => key !== 'psycho' || psychoModeUnlocked)
                 .map(([key, preset]) => (
-                <button 
+                <PresetButton
                   key={key}
+                  presetKey={key as PresetKey}
+                  name={preset.name}
+                  icon={preset.icon}
+                  description={preset.description}
+                  isPsycho={key === 'psycho'}
+                  showUnlockedLabel={key === 'psycho'}
+                  onClick={handlePreset}
                   type="button"
-                  className={`${styles.presetButton} ${key === 'psycho' ? styles.psychoButton : ''}`}
-                  onClick={() => handlePreset(key as PresetKey)}
-                >
-                  <div className={styles.presetTitle}>
-                    {preset.icon} {preset.name}
-                    {key === 'psycho' && <div className={styles.psychoLabel}>UNLOCKED!</div>}
-                  </div>
-                  <div className={styles.presetDesc}>{preset.description}</div>
-                </button>
+                />
               ))}
             </div>
           </div>

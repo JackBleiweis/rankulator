@@ -8,24 +8,9 @@ import LoadingScreen from './components/LoadingScreen/LoadingScreen';
 import RankulatorTitle from './components/RankulatorTitle/RankulatorTitle';
 import WelcomeModal from './components/WelcomeModal/WelcomeModal';
 import { GameSettings } from './components/Settings/Settings';
+import { Player, GamePhase } from './types';
+import { hasUserVisitedBefore, markUserAsVisited } from './utils/localStorage';
 import styles from './App.module.scss';
-
-interface Player {
-  id: string;
-  name: string;
-  position: string;
-  team: string | null;
-  college: string;
-  yearsExp: number;
-  age: number | null;
-  active: boolean;
-  searchRank: number;
-  score: number;
-  espnId: number | null;
-  playerHeadshotLink: string | null;
-}
-
-type GamePhase = 'position-select' | 'loading' | 'ranking' | 'complete';
 
 function App() {
   const [gamePhase, setGamePhase] = useState<GamePhase>('position-select');
@@ -35,15 +20,14 @@ function App() {
 
   // Check if this is the user's first visit
   useEffect(() => {
-    const hasVisitedBefore = localStorage.getItem('rankulator_visited');
-    if (!hasVisitedBefore) {
+    if (!hasUserVisitedBefore()) {
       setShowWelcomeModal(true);
     }
   }, []);
 
   // Handle welcome modal close
   const handleWelcomeClose = () => {
-    localStorage.setItem('rankulator_visited', 'true');
+    markUserAsVisited();
     setShowWelcomeModal(false);
   };
   const [players, setPlayers] = useState<Player[]>([]);
