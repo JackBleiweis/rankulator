@@ -13,7 +13,7 @@ const WelcomeModal: React.FC<WelcomeModalProps> = ({ isOpen, onClose }) => {
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      title="🏈 Welcome!"
+      title="🏈 Welcome to Rankulator!"
       maxWidth="600px"
     >
       <div className={styles.welcomeContent}>

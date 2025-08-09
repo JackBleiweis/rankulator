@@ -38,12 +38,12 @@ export const PRESET_CONFIG = {
   psycho: {
     name: 'Psycho',
     icon: '🤯',
-    description: '60 batches • 15-25 min',
+    description: '64 batches • 15-20 min',
     settings: {
-      batchSize: 20,
+      batchSize: 8,
       explorationBatches: 20,
-      mixedBatches: 20,
-      refinementBatches: 20
+      mixedBatches: 22,
+      refinementBatches: 22
     }
   }
 } as const;
