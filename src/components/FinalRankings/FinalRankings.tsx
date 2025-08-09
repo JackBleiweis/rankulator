@@ -27,13 +27,17 @@ interface FinalRankingsProps {
   selectedPosition: string;
   totalBatches: number;
   onReset: () => void;
+  psychoMode: boolean;
+  onTogglePsychoMode: (enabled: boolean) => void;
 }
 
 const FinalRankings: React.FC<FinalRankingsProps> = ({
   players,
   selectedPosition,
   totalBatches,
-  onReset
+  onReset,
+  psychoMode,
+  onTogglePsychoMode
 }) => {
   const [showTieringModal, setShowTieringModal] = useState(false);
   const [showPlayerScores, setShowPlayerScores] = useState(false);
@@ -371,6 +375,8 @@ const FinalRankings: React.FC<FinalRankingsProps> = ({
         onClose={() => setShowTieringModal(false)}
         showPlayerScores={showPlayerScores}
         onToggleScores={setShowPlayerScores}
+        psychoMode={psychoMode}
+        onTogglePsychoMode={onTogglePsychoMode}
       />
       
       <DisclaimerModal

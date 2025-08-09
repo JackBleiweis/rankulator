@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { PRESET_CONFIG, PresetKey } from '../../config/presetConfig';
 import styles from './Settings.module.scss';
 
 interface SettingsProps {
@@ -6,6 +7,7 @@ interface SettingsProps {
   onClose: () => void;
   onSave: (settings: GameSettings) => void;
   currentSettings: GameSettings;
+  psychoModeUnlocked?: boolean;
 }
 
 export interface GameSettings {
@@ -19,7 +21,8 @@ const Settings: React.FC<SettingsProps> = ({
   isOpen,
   onClose,
   onSave,
-  currentSettings
+  currentSettings,
+  psychoModeUnlocked = false
 }) => {
   const [settings, setSettings] = useState<GameSettings>(currentSettings);
 
@@ -55,36 +58,8 @@ const Settings: React.FC<SettingsProps> = ({
     setSettings(defaultSettings);
   };
 
-  const handlePreset = (preset: 'quick' | 'normal' | 'extensive') => {
-    let presetSettings: GameSettings;
-    
-    switch (preset) {
-      case 'quick':
-        presetSettings = {
-          batchSize: 6,
-          explorationBatches: 3,
-          mixedBatches: 2,
-          refinementBatches: 3
-        };
-        break;
-      case 'normal':
-        presetSettings = {
-          batchSize: 8,
-          explorationBatches: 8,
-          mixedBatches: 8,
-          refinementBatches: 8
-        };
-        break;
-      case 'extensive':
-        presetSettings = {
-          batchSize: 8,
-          explorationBatches: 15,
-          mixedBatches: 10,
-          refinementBatches: 10
-        };
-        break;
-    }
-    
+  const handlePreset = (preset: PresetKey) => {
+    const presetSettings = PRESET_CONFIG[preset].settings;
     setSettings(presetSettings);
   };
 
@@ -110,32 +85,22 @@ const Settings: React.FC<SettingsProps> = ({
           <div className={styles.presets}>
             <h3>Quick Presets</h3>
             <div className={styles.presetButtons}>
-              <button 
-                type="button"
-                className={styles.presetButton}
-                onClick={() => handlePreset('quick')}
-              >
-                <div className={styles.presetTitle}>⚡ Quick</div>
-                <div className={styles.presetDesc}>8 batches • 1-3 min</div>
-              </button>
-              
-              <button 
-                type="button"
-                className={styles.presetButton}
-                onClick={() => handlePreset('normal')}
-              >
-                <div className={styles.presetTitle}>⚖️ Normal</div>
-                <div className={styles.presetDesc}>24 batches • 3-6 min</div>
-              </button>
-              
-              <button 
-                type="button"
-                className={styles.presetButton}
-                onClick={() => handlePreset('extensive')}
-              >
-                <div className={styles.presetTitle}>🔍 Extensive</div>
-                <div className={styles.presetDesc}>35 batches • 6-10 min</div>
-              </button>
+              {Object.entries(PRESET_CONFIG)
+                .filter(([key]) => key !== 'psycho' || psychoModeUnlocked)
+                .map(([key, preset]) => (
+                <button 
+                  key={key}
+                  type="button"
+                  className={`${styles.presetButton} ${key === 'psycho' ? styles.psychoButton : ''}`}
+                  onClick={() => handlePreset(key as PresetKey)}
+                >
+                  <div className={styles.presetTitle}>
+                    {preset.icon} {preset.name}
+                    {key === 'psycho' && <div className={styles.psychoLabel}>UNLOCKED!</div>}
+                  </div>
+                  <div className={styles.presetDesc}>{preset.description}</div>
+                </button>
+              ))}
             </div>
           </div>
 

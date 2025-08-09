@@ -164,6 +164,53 @@
   font-style: italic;
 }
 
+.psychoButton {
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%) !important;
+  border-color: #f59e0b !important;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.3),
+      transparent
+    );
+    animation: shimmer 2s infinite;
+  }
+
+  &:hover {
+    background: linear-gradient(135deg, #fde68a 0%, #fcd34d 100%) !important;
+    border-color: #d97706 !important;
+    box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4) !important;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+.psychoLabel {
+  font-size: 10px;
+  font-weight: 700;
+  color: #d97706;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-top: 4px;
+}
+
 .divider {
   height: 1px;
   background: #e9ecef;

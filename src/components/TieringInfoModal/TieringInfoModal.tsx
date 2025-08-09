@@ -7,9 +7,11 @@ interface TieringInfoModalProps {
   onClose: () => void;
   showPlayerScores: boolean;
   onToggleScores: (show: boolean) => void;
+  psychoMode: boolean;
+  onTogglePsychoMode: (enabled: boolean) => void;
 }
 
-const TieringInfoModal: React.FC<TieringInfoModalProps> = ({ isOpen, onClose, showPlayerScores, onToggleScores }) => {
+const TieringInfoModal: React.FC<TieringInfoModalProps> = ({ isOpen, onClose, showPlayerScores, onToggleScores, psychoMode, onTogglePsychoMode }) => {
 
   return (
     <Modal
@@ -93,6 +95,20 @@ const TieringInfoModal: React.FC<TieringInfoModalProps> = ({ isOpen, onClose, sh
               className={styles.toggleCheckbox}
             />
             <span className={styles.toggleText}>Show player scores in rankings</span>
+          </label>
+          
+          <label className={styles.toggleLabel}>
+            <input
+              type="checkbox"
+              checked={psychoMode}
+              onChange={(e) => onTogglePsychoMode(e.target.checked)}
+              className={styles.toggleCheckbox}
+            />
+            <span className={styles.toggleText}>
+              🤯 Hey! Thanks for reading this much. If you've made it here that means you care about fantasy, 
+              check this checkbox to <strong>unlock the psycho variant</strong> in settings for the deepest possible 
+              dive into your fantasy rankings. Have fun!
+            </span>
           </label>
         </div>
       </div>

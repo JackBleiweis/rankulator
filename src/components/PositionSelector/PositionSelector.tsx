@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { GameSettings } from '../Settings/Settings';
+import { POSITION_CONFIG, PositionKey } from '../../config/positionConfig';
+import { PRESET_CONFIG, PresetKey } from '../../config/presetConfig';
 import styles from './PositionSelector.module.scss';
 import RankulatorTitle from '../RankulatorTitle/RankulatorTitle';
 
@@ -8,89 +10,24 @@ interface PositionSelectorProps {
   loading: boolean;
   selectedPosition: string;
   error?: string;
+  psychoModeUnlocked?: boolean;
 }
 
-// Position configuration
-const POSITION_CONFIG = {
-  QB: { 
-    name: 'Quarterbacks', 
-    default: 16, 
-    min: 8, 
-    max: 32, 
-    description: 'Essential QB rankings for your league'
-  },
-  RB: { 
-    name: 'Running Backs', 
-    default: 20, 
-    min: 10, 
-    max: 50, 
-    description: 'Top RBs including handcuffs and sleepers'
-  },
-  WR: { 
-    name: 'Wide Receivers', 
-    default: 30, 
-    min: 15, 
-    max: 75, 
-    description: 'Deep WR rankings for all roster spots'
-  },
-  TE: { 
-    name: 'Tight Ends', 
-    default: 12, 
-    min: 6, 
-    max: 32, 
-    description: 'Key TEs for streaming and starting'
-  }
-} as const;
 
-// Preset configurations
-const PRESET_CONFIG = {
-  quick: {
-    name: 'Quick',
-    icon: '⚡',
-    description: '8 batches • 1-3 min',
-    settings: {
-      batchSize: 6,
-      explorationBatches: 3,
-      mixedBatches: 2,
-      refinementBatches: 3
-    }
-  },
-  normal: {
-    name: 'Normal',
-    icon: '⚖️',
-    description: '24 batches • 3-6 min',
-    settings: {
-      batchSize: 6,
-      explorationBatches: 5,
-      mixedBatches: 5,
-      refinementBatches: 5
-    }
-  },
-  extensive: {
-    name: 'Extensive',
-    icon: '🔍',
-    description: '35 batches • 6-10 min',
-    settings: {
-      batchSize: 6,
-      explorationBatches: 8,
-      mixedBatches: 8,
-      refinementBatches: 8
-    }
-  }
-} as const;
 
 const PositionSelector: React.FC<PositionSelectorProps> = ({
   onPositionSelect,
   loading,
   selectedPosition,
-  error
+  error,
+  psychoModeUnlocked = false
 }) => {
   const [tempSelectedPosition, setTempSelectedPosition] = useState<string>('');
   const [playerCount, setPlayerCount] = useState<number>(16);
-  const [selectedPreset, setSelectedPreset] = useState<'quick' | 'normal' | 'extensive'>('normal');
+  const [selectedPreset, setSelectedPreset] = useState<PresetKey>('normal');
 
   const handlePositionClick = (position: string) => {
-    const config = POSITION_CONFIG[position as keyof typeof POSITION_CONFIG];
+    const config = POSITION_CONFIG[position as PositionKey];
     setTempSelectedPosition(position);
     setPlayerCount(config.default);
   };
@@ -106,11 +43,11 @@ const PositionSelector: React.FC<PositionSelectorProps> = ({
     setPlayerCount(parseInt(e.target.value));
   };
 
-  const handlePresetChange = (preset: 'quick' | 'normal' | 'extensive') => {
+  const handlePresetChange = (preset: PresetKey) => {
     setSelectedPreset(preset);
   };
 
-  const currentConfig = tempSelectedPosition ? POSITION_CONFIG[tempSelectedPosition as keyof typeof POSITION_CONFIG] : null;
+  const currentConfig = tempSelectedPosition ? POSITION_CONFIG[tempSelectedPosition as PositionKey] : null;
   const currentPreset = PRESET_CONFIG[selectedPreset];
 
   const getPresetName = (playerCount: number) => {
@@ -196,20 +133,25 @@ const PositionSelector: React.FC<PositionSelectorProps> = ({
             </div>
 
             <div className={styles.presetOptions}>
-              {Object.entries(PRESET_CONFIG).map(([key, preset]) => (
-                <label key={key} className={styles.presetOption}>
+              {Object.entries(PRESET_CONFIG)
+                .filter(([key]) => key !== 'psycho' || psychoModeUnlocked)
+                .map(([key, preset]) => (
+                <label key={key} className={`${styles.presetOption} ${key === 'psycho' ? styles.psychoOption : ''}`}>
                   <input
                     type="radio"
                     name="preset"
                     value={key}
                     checked={selectedPreset === key}
-                    onChange={() => handlePresetChange(key as 'quick' | 'normal' | 'extensive')}
+                    onChange={() => handlePresetChange(key as PresetKey)}
                     className={styles.presetRadio}
                   />
-                  <div className={styles.presetCard}>
+                  <div className={`${styles.presetCard} ${key === 'psycho' ? styles.psychoCard : ''}`}>
                     <div className={styles.presetIcon}>{preset.icon}</div>
                     <div className={styles.presetContent}>
-                      <div className={styles.presetName}>{preset.name}</div>
+                      <div className={styles.presetName}>
+                        {preset.name}
+                        {key === 'psycho' && <span className={styles.unlockedBadge}>UNLOCKED!</span>}
+                      </div>
                       <div className={styles.presetDesc}>{preset.description}</div>
                     </div>
                   </div>

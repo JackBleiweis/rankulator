@@ -30,6 +30,7 @@ type GamePhase = 'position-select' | 'loading' | 'ranking' | 'complete';
 function App() {
   const [gamePhase, setGamePhase] = useState<GamePhase>('position-select');
   const [showWelcomeModal, setShowWelcomeModal] = useState(false);
+  const [psychoMode, setPsychoMode] = useState(false);
   const [selectedPosition, setSelectedPosition] = useState<string>('');
 
   // Check if this is the user's first visit
@@ -209,6 +210,7 @@ function App() {
           loading={loading}
           selectedPosition={selectedPosition}
           error={error}
+          psychoModeUnlocked={psychoMode}
         />
         <WelcomeModal 
           isOpen={showWelcomeModal}
@@ -238,6 +240,8 @@ function App() {
           selectedPosition={selectedPosition}
           totalBatches={TOTAL_BATCHES}
           onReset={resetGame}
+          psychoMode={psychoMode}
+          onTogglePsychoMode={setPsychoMode}
         />
         <WelcomeModal 
           isOpen={showWelcomeModal}

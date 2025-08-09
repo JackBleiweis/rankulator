@@ -84,13 +84,18 @@
 
 .toggleLabel {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 12px;
   cursor: pointer;
   font-size: 15px;
   font-weight: 500;
   color: #333;
   transition: color 0.2s ease;
+  margin-bottom: 16px;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
 
   &:hover {
     color: #2196f3;
@@ -103,6 +108,8 @@
   accent-color: #2196f3;
   cursor: pointer;
   border-radius: 4px;
+  margin-top: 2px;
+  flex-shrink: 0;
 }
 
 .toggleText {
