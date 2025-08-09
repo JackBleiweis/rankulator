@@ -40,7 +40,7 @@ const PresetButton: React.FC<PresetButtonProps> = ({
           onChange={() => onClick(presetKey)}
           className={styles.presetRadio}
         />
-        <div className={`${styles.presetCard} ${isPsycho ? styles.psychoCard : ''}`}>
+        <div className={`${styles.presetCard} ${isPsycho ? styles.psychoCard : ''} ${isSelected ? styles.selected : ''}`}>
           <div className={styles.presetIcon}>{icon}</div>
           <div className={styles.presetContent}>
             <div className={styles.presetName}>

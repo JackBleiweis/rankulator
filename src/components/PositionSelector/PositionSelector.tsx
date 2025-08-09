@@ -3,6 +3,8 @@ import { GameSettings } from '../Settings/Settings';
 import { POSITION_CONFIG, PositionKey } from '../../config/positionConfig';
 import { PRESET_CONFIG, PresetKey } from '../../config/presetConfig';
 import PresetButton from '../common/PresetButton/PresetButton';
+import { useIsMobile } from '../../hooks/useIsMobile';
+import { getDisplayName } from '../../utils/positionUtils';
 import styles from './PositionSelector.module.scss';
 import RankulatorTitle from '../RankulatorTitle/RankulatorTitle';
 
@@ -26,6 +28,7 @@ const PositionSelector: React.FC<PositionSelectorProps> = ({
   const [tempSelectedPosition, setTempSelectedPosition] = useState<string>('');
   const [playerCount, setPlayerCount] = useState<number>(16);
   const [selectedPreset, setSelectedPreset] = useState<PresetKey>('normal');
+  const isMobile = useIsMobile();
 
   const handlePositionClick = (position: string) => {
     const config = POSITION_CONFIG[position as PositionKey];
@@ -85,9 +88,11 @@ const PositionSelector: React.FC<PositionSelectorProps> = ({
                 disabled={loading}
                 className={`${styles.positionButton} ${styles.active}`}
               >
-                {config.name}
+                <span className={styles.positionName}>
+                  {getDisplayName(position, config.name, isMobile)}
+                </span>
                 <br />
-                <small>({config.min}-{config.max} players)</small>
+                <small>({config.min}-{config.max})</small>
               </button>
             ))}
           </div>
@@ -95,7 +100,7 @@ const PositionSelector: React.FC<PositionSelectorProps> = ({
       ) : (
         <>
           <div className={styles.sectionHeader}>
-            <h2>Customize Your {currentConfig?.name} Ranking</h2>
+            <h2>Customize Your {getDisplayName(tempSelectedPosition, currentConfig?.name || '', isMobile)} Ranking</h2>
             <p>{currentConfig?.description}</p>
           </div>
 
@@ -159,7 +164,7 @@ const PositionSelector: React.FC<PositionSelectorProps> = ({
               className={styles.backButton}
               disabled={loading}
             >
-              ← Back to Positions
+              {isMobile ? '← Positions' : '← Back to Positions'}
             </button>
             
             <button
@@ -169,7 +174,9 @@ const PositionSelector: React.FC<PositionSelectorProps> = ({
             >
               {loading && selectedPosition === tempSelectedPosition ? 
                 'Loading...' : 
-                `Start ${currentPreset.name} Ranking (${playerCount} ${currentConfig?.name})`
+                isMobile ? 
+                  `Start ${currentPreset.name} (${playerCount})` :
+                  `Start ${currentPreset.name} Ranking (${playerCount} ${currentConfig?.name})`
               }
             </button>
           </div>

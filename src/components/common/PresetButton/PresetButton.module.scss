@@ -95,6 +95,72 @@
   position: absolute;
   opacity: 0;
   cursor: pointer;
+
+  &:checked + .presetCard,
+  &:checked + .presetCard.selected {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+    color: white !important;
+    border-color: #667eea !important;
+    box-shadow: 0 4px 16px rgba(102, 126, 234, 0.4) !important;
+    transform: translateY(-2px) !important;
+
+    .presetIcon {
+      transform: scale(1.1) !important;
+    }
+
+    .presetName {
+      color: white !important;
+      font-weight: 700 !important;
+    }
+
+    .presetDesc {
+      color: rgba(255, 255, 255, 0.9) !important;
+    }
+
+    .unlockedBadge {
+      background: rgba(255, 255, 255, 0.2) !important;
+      color: white !important;
+    }
+
+    &:hover {
+      background: linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%) !important;
+      border-color: #5a67d8 !important;
+      transform: translateY(-2px) !important;
+    }
+  }
+}
+
+// Additional explicit selected state (fallback)
+.presetCard.selected {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+  color: white !important;
+  border-color: #667eea !important;
+  box-shadow: 0 4px 16px rgba(102, 126, 234, 0.4) !important;
+  transform: translateY(-2px) !important;
+
+  .presetIcon {
+    transform: scale(1.1) !important;
+  }
+
+  .presetName {
+    color: white !important;
+    font-weight: 700 !important;
+  }
+
+  .presetDesc {
+    color: rgba(255, 255, 255, 0.9) !important;
+  }
+
+  .unlockedBadge {
+    background: rgba(255, 255, 255, 0.2) !important;
+    color: white !important;
+  }
+
+  &:hover {
+    background: linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%) !important;
+    border-color: #5a67d8 !important;
+    transform: translateY(-2px) !important;
+  }
 }
 
 .presetCard {
@@ -106,6 +172,7 @@
   border: 2px solid #e5e7eb;
   border-radius: 12px;
   transition: all 0.3s ease;
+  cursor: pointer;
 
   &:hover {
     background: linear-gradient(135deg, #f8f9fa 0%, #f1f3f4 100%);

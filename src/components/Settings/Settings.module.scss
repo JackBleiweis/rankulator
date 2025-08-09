@@ -126,6 +126,12 @@
   display: flex;
   gap: 12px;
   flex-wrap: wrap;
+
+  // Mobile responsive
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: 8px;
+  }
 }
 
 .presetButton {
@@ -138,6 +144,13 @@
   cursor: pointer;
   transition: all 0.2s ease;
   text-align: center;
+
+  // Mobile responsive
+  @media (max-width: 768px) {
+    flex: none;
+    min-width: 0;
+    width: 100%;
+  }
 
   &:hover {
     background: linear-gradient(135deg, #e9ecef 0%, #dee2e6 100%);
