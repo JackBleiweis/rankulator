@@ -103,7 +103,15 @@
   font-weight: 400;
 }
 
-// Button styles for components used within InformationCard
+.buttonSection {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 22px;
+  flex-wrap: wrap;
+}
+
+// Button styles
 .infoButton {
   background: linear-gradient(135deg, #2196f3 0%, #1976d2 100%);
   color: white;
@@ -129,6 +137,116 @@
   &:focus {
     outline: 2px solid #2196f3;
     outline-offset: 2px;
+  }
+}
+
+.disclaimerButton {
+  background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(255, 152, 0, 0.3);
+
+  &:hover {
+    background: linear-gradient(135deg, #f57c00 0%, #ef6c00 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(255, 152, 0, 0.4);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+
+  &:focus {
+    outline: 2px solid #ff9800;
+    outline-offset: 2px;
+  }
+}
+
+.shareButton {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+
+  &:hover {
+    background: linear-gradient(135deg, #059669 0%, #047857 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+
+  &:focus {
+    outline: 2px solid #10b981;
+    outline-offset: 2px;
+  }
+}
+
+.downloadButton {
+  background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(124, 58, 237, 0.3);
+
+  &:hover {
+    background: linear-gradient(135deg, #6d28d9 0%, #5b21b6 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(124, 58, 237, 0.4);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+
+  &:focus {
+    outline: 2px solid #7c3aed;
+    outline-offset: 2px;
+  }
+}
+
+.shareMessage {
+  text-align: center;
+  margin-bottom: 20px;
+  padding: 12px 20px;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+  border-radius: 8px;
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+  max-width: 400px;
+  margin-left: auto;
+  margin-right: auto;
+  animation: slideInFade 0.3s ease-out;
+}
+
+@keyframes slideInFade {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
@@ -273,14 +391,14 @@
 
 // Tier-specific colors - Green (best) to Red (worst) progression
 .tier1 {
-  border-left-color: #10b981 !important;
-  background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%) !important;
+  border-left-color: #16a34a !important;
+  background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%) !important;
 
   .tierLabel {
-    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
     color: white;
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
+    box-shadow: 0 4px 15px rgba(22, 163, 74, 0.4);
     border: 2px solid rgba(255, 255, 255, 0.3);
 
     &::after {
@@ -294,9 +412,9 @@
   }
 
   .tierCount {
-    background: linear-gradient(135deg, #10b981 0%, #a7f3d0 100%);
-    color: #065f46;
-    border-color: #10b981;
+    background: linear-gradient(135deg, #16a34a 0%, #bbf7d0 100%);
+    color: #14532d;
+    border-color: #16a34a;
     font-weight: 600;
   }
 }
@@ -359,21 +477,21 @@
 }
 
 .tier5 {
-  border-left-color: #dc2626 !important;
-  background: linear-gradient(135deg, #fecaca 0%, #fca5a5 100%) !important;
+  border-left-color: #b91c1c !important;
+  background: linear-gradient(135deg, #fecaca 0%, #f87171 100%) !important;
 
   .tierLabel {
-    background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+    background: linear-gradient(135deg, #b91c1c 0%, #991b1b 100%);
     color: white;
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-    box-shadow: 0 4px 15px rgba(220, 38, 38, 0.4);
+    box-shadow: 0 4px 15px rgba(185, 28, 28, 0.4);
     border: 2px solid rgba(255, 255, 255, 0.2);
   }
 
   .tierCount {
-    background: linear-gradient(135deg, #dc2626 0%, #fca5a5 100%);
+    background: linear-gradient(135deg, #b91c1c 0%, #f87171 100%);
     color: #7f1d1d;
-    border-color: #dc2626;
+    border-color: #b91c1c;
   }
 }
 

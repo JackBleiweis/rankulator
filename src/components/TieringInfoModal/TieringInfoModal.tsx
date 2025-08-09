@@ -10,6 +10,7 @@ interface TieringInfoModalProps {
 }
 
 const TieringInfoModal: React.FC<TieringInfoModalProps> = ({ isOpen, onClose, showPlayerScores, onToggleScores }) => {
+
   return (
     <Modal
       isOpen={isOpen}
@@ -17,6 +18,12 @@ const TieringInfoModal: React.FC<TieringInfoModalProps> = ({ isOpen, onClose, sh
       title="🎯 How Our Tiering System Works"
     >
       <div className={styles.section}>
+        <h4>🎮 Welcome to the Tiering System</h4>
+        <p>
+          Our tiering system automatically organizes players into meaningful groups based on their 
+          relative performance. This helps you quickly identify talent tiers and make better roster 
+          decisions. The system uses advanced statistics while remaining intuitive and easy to understand.
+        </p>
         <h4>📈 Statistical Z-Score Analysis</h4>
         <p>
           Instead of arbitrary cutoffs, we use statistical analysis to create meaningful tiers. 
@@ -89,6 +96,8 @@ const TieringInfoModal: React.FC<TieringInfoModalProps> = ({ isOpen, onClose, sh
           </label>
         </div>
       </div>
+
+
     </Modal>
   );
 };

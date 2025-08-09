@@ -76,9 +76,9 @@ const PlayerCard: React.FC<PlayerCardProps> = ({
           </div>
         </div>
         {showScore && (
-          <div className={styles.playerScore}>
-            <strong>Score: {player.score}</strong>
-          </div>
+        <div className={styles.playerScore}>
+          <strong>Score: {player.score}</strong>
+        </div>
         )}
       </div>
     );

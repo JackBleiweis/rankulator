@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import PlayerCard from '../PlayerCard/PlayerCard';
-import InformationCard from '../InformationCard/InformationCard';
 import TieringInfoModal from '../TieringInfoModal/TieringInfoModal';
+import DisclaimerModal from '../DisclaimerModal/DisclaimerModal';
 import styles from './FinalRankings.module.scss';
 
 interface Player {
@@ -37,6 +37,8 @@ const FinalRankings: React.FC<FinalRankingsProps> = ({
 }) => {
   const [showTieringModal, setShowTieringModal] = useState(false);
   const [showPlayerScores, setShowPlayerScores] = useState(false);
+  const [showDisclaimerModal, setShowDisclaimerModal] = useState(false);
+  const [shareMessage, setShareMessage] = useState('');
   const createTiers = (players: Player[]): PlayerWithTier[] => {
     if (players.length === 0) return [];
     
@@ -215,6 +217,61 @@ const FinalRankings: React.FC<FinalRankingsProps> = ({
     });
   };
 
+  // Share functionality
+  const handleShare = async () => {
+    const tierGroups = tieredPlayers.reduce((groups, player) => {
+      if (!groups[player.tier]) {
+        groups[player.tier] = [];
+      }
+      groups[player.tier].push(player);
+      return groups;
+    }, {} as Record<number, PlayerWithTier[]>);
+
+    let shareText =  "I just created my custom fantasy rankings at https://rankulator.com! Check it out!"
+
+    try {
+      await navigator.clipboard.writeText(shareText);
+      setShareMessage('Share link copied to clipboard!');
+      setTimeout(() => setShareMessage(''), 3000);
+    } catch (err) {
+      setShareMessage('Failed to copy to clipboard');
+      setTimeout(() => setShareMessage(''), 3000);
+    }
+  };
+
+  // Download CSV functionality
+  const handleDownloadCSV = () => {
+    const tierGroups = tieredPlayers.reduce((groups, player) => {
+      if (!groups[player.tier]) {
+        groups[player.tier] = [];
+      }
+      groups[player.tier].push(player);
+      return groups;
+    }, {} as Record<number, PlayerWithTier[]>);
+
+    let csvContent = 'Rank,Player Name,Team,Tier,Tier Label,Score,College,Years Experience,Age\n';
+    
+    let overallRank = 1;
+    Object.entries(tierGroups)
+      .sort(([a], [b]) => Number(a) - Number(b))
+      .forEach(([tierNum, playersInTier]) => {
+        playersInTier.forEach((player) => {
+          csvContent += `${overallRank},${player.name},"${player.team || 'N/A'}",${player.tier},"${player.tierLabel}",${player.score},"${player.college}",${player.yearsExp},${player.age || 'N/A'}\n`;
+          overallRank++;
+        });
+      });
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    link.setAttribute('href', url);
+    link.setAttribute('download', `${selectedPosition}_Rankings_Rankulator.csv`);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   const tieredPlayers = createTiers(players);
   
   // Group players by tier for display
@@ -240,17 +297,39 @@ const FinalRankings: React.FC<FinalRankingsProps> = ({
         </div>
       </div>
       
-            <InformationCard
-        description="Your players have been intelligently grouped into tiers based on your ranking preferences. Each tier represents players of similar relative value according to your selections throughout the ranking process."
-        variant="info"
-      >
+            <div className={styles.buttonSection}>
         <button 
           className={styles.infoButton}
           onClick={() => setShowTieringModal(true)}
         >
-          📊 How Tiering Works & Settings
+          📊 Tiering Info & Player Scores
         </button>
-      </InformationCard>
+        
+        <button 
+          className={styles.disclaimerButton}
+          onClick={() => setShowDisclaimerModal(true)}
+        >
+          ⚠️ Read The Disclaimer
+        </button>
+        <button 
+          className={styles.shareButton}
+          onClick={handleShare}
+        >
+          📋 Share Rankings
+        </button>
+        <button 
+          className={styles.downloadButton}
+          onClick={handleDownloadCSV}
+        >
+          📥 Download CSV
+        </button>
+      </div>
+      
+      {shareMessage && (
+        <div className={styles.shareMessage}>
+          {shareMessage}
+        </div>
+      )}
       
       <div className={styles.rankingsList}>
         {Object.entries(tierGroups)
@@ -292,6 +371,11 @@ const FinalRankings: React.FC<FinalRankingsProps> = ({
         onClose={() => setShowTieringModal(false)}
         showPlayerScores={showPlayerScores}
         onToggleScores={setShowPlayerScores}
+      />
+      
+      <DisclaimerModal
+        isOpen={showDisclaimerModal}
+        onClose={() => setShowDisclaimerModal(false)}
       />
     </div>
   );

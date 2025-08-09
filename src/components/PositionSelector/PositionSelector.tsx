@@ -1,117 +1,244 @@
 import React, { useState } from 'react';
-import Settings, { GameSettings } from '../Settings/Settings';
+import { GameSettings } from '../Settings/Settings';
 import styles from './PositionSelector.module.scss';
 
 interface PositionSelectorProps {
-  onPositionSelect: (position: string) => void;
+  onPositionSelect: (position: string, playerCount: number, gameSettings: GameSettings) => void;
   loading: boolean;
   selectedPosition: string;
   error?: string;
-  onSettingsChange?: (settings: GameSettings) => void;
-  currentSettings?: GameSettings;
 }
+
+// Position configuration
+const POSITION_CONFIG = {
+  QB: { 
+    name: 'Quarterbacks', 
+    default: 16, 
+    min: 8, 
+    max: 32, 
+    description: 'Essential QB rankings for your league'
+  },
+  RB: { 
+    name: 'Running Backs', 
+    default: 20, 
+    min: 10, 
+    max: 50, 
+    description: 'Top RBs including handcuffs and sleepers'
+  },
+  WR: { 
+    name: 'Wide Receivers', 
+    default: 30, 
+    min: 15, 
+    max: 75, 
+    description: 'Deep WR rankings for all roster spots'
+  },
+  TE: { 
+    name: 'Tight Ends', 
+    default: 12, 
+    min: 6, 
+    max: 32, 
+    description: 'Key TEs for streaming and starting'
+  }
+} as const;
+
+// Preset configurations
+const PRESET_CONFIG = {
+  quick: {
+    name: 'Quick',
+    icon: '⚡',
+    description: '8 batches • 1-3 min',
+    settings: {
+      batchSize: 6,
+      explorationBatches: 3,
+      mixedBatches: 2,
+      refinementBatches: 3
+    }
+  },
+  normal: {
+    name: 'Normal',
+    icon: '⚖️',
+    description: '24 batches • 3-6 min',
+    settings: {
+      batchSize: 6,
+      explorationBatches: 5,
+      mixedBatches: 5,
+      refinementBatches: 5
+    }
+  },
+  extensive: {
+    name: 'Extensive',
+    icon: '🔍',
+    description: '35 batches • 6-10 min',
+    settings: {
+      batchSize: 6,
+      explorationBatches: 8,
+      mixedBatches: 8,
+      refinementBatches: 8
+    }
+  }
+} as const;
 
 const PositionSelector: React.FC<PositionSelectorProps> = ({
   onPositionSelect,
   loading,
   selectedPosition,
-  error,
-  onSettingsChange,
-  currentSettings
+  error
 }) => {
-  const [showSettings, setShowSettings] = useState(false);
+  const [tempSelectedPosition, setTempSelectedPosition] = useState<string>('');
+  const [playerCount, setPlayerCount] = useState<number>(16);
+  const [selectedPreset, setSelectedPreset] = useState<'quick' | 'normal' | 'extensive'>('normal');
 
-  const defaultSettings: GameSettings = {
-    batchSize: 6,
-    explorationBatches: 5,
-    mixedBatches: 5,
-    refinementBatches: 5
+  const handlePositionClick = (position: string) => {
+    const config = POSITION_CONFIG[position as keyof typeof POSITION_CONFIG];
+    setTempSelectedPosition(position);
+    setPlayerCount(config.default);
   };
 
-  const handleSettingsChange = (settings: GameSettings) => {
-    if (onSettingsChange) {
-      onSettingsChange(settings);
+  const handleStartRanking = () => {
+    if (tempSelectedPosition) {
+      const presetSettings = PRESET_CONFIG[selectedPreset].settings;
+      onPositionSelect(tempSelectedPosition, playerCount, presetSettings);
     }
   };
 
+  const handlePlayerCountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPlayerCount(parseInt(e.target.value));
+  };
+
+  const handlePresetChange = (preset: 'quick' | 'normal' | 'extensive') => {
+    setSelectedPreset(preset);
+  };
+
+  const currentConfig = tempSelectedPosition ? POSITION_CONFIG[tempSelectedPosition as keyof typeof POSITION_CONFIG] : null;
+  const currentPreset = PRESET_CONFIG[selectedPreset];
+
   return (
-    <>
-      <div className={styles.container}>
-        <div className={styles.header}>
-          <div className={styles.titleSection}>
-            <h1 className={styles.title}>🏈 Rankulator</h1>
-            <p className={styles.subtitle}>
-              Find your favorite players through elimination rounds!
+    <div className={styles.container}>
+      <div className={styles.header}>
+        <div className={styles.titleSection}>
+          <h1 className={styles.title}>🏈 Rankulator</h1>
+          <p className={styles.subtitle}>
+            Find your favorite players through elimination rounds!
+          </p>
+        </div>
+      </div>
+    
+      {!tempSelectedPosition ? (
+        <>
+          <div className={styles.sectionHeader}>
+            <h2>Select Position to Rank</h2>
+            <p>
+              Choose which position you'd like to rank. We'll load the top players and start the elimination process.
             </p>
           </div>
-          <button 
-            className={styles.settingsButton}
-            onClick={() => setShowSettings(true)}
-            title="Customize ranking settings"
-          >
-            ⚙️
-          </button>
-        </div>
-      
-      <div className={styles.sectionHeader}>
-        <h2>Select Position to Rank</h2>
-        <p>
-          Choose which position you'd like to rank. We'll load the top players and start the elimination process.
-        </p>
-      </div>
-      
-      <div className={styles.positionButtons}>
-        <button
-          onClick={() => onPositionSelect('QB')}
-          disabled={loading}
-          className={`${styles.positionButton} ${styles.active}`}
-        >
-          {loading && selectedPosition === 'QB' ? 'Loading...' : 'Quarterbacks'}
-        </button>
-        
-        {/* Future positions - disabled for now */}
-        <button
-          disabled
-          className={`${styles.positionButton} ${styles.disabled}`}
-        >
-          Running Backs
-          <br />
-          <small>(Coming Soon)</small>
-        </button>
-        
-        <button
-          disabled
-          className={`${styles.positionButton} ${styles.disabled}`}
-        >
-          Wide Receivers
-          <br />
-          <small>(Coming Soon)</small>
-        </button>
-        
-        <button
-          disabled
-          className={`${styles.positionButton} ${styles.disabled}`}
-        >
-          Tight Ends
-          <br />
-          <small>(Coming Soon)</small>
-        </button>
-      </div>
-      
-              {error && (
-          <div className={styles.errorMessage}>
-            {error}
+          
+          <div className={styles.positionButtons}>
+            {Object.entries(POSITION_CONFIG).map(([position, config]) => (
+              <button
+                key={position}
+                onClick={() => handlePositionClick(position)}
+                disabled={loading}
+                className={`${styles.positionButton} ${styles.active}`}
+              >
+                {config.name}
+                <br />
+                <small>({config.min}-{config.max} players)</small>
+              </button>
+            ))}
           </div>
-        )}
+        </>
+      ) : (
+        <>
+          <div className={styles.sectionHeader}>
+            <h2>Customize Your {currentConfig?.name} Ranking</h2>
+            <p>{currentConfig?.description}</p>
+          </div>
 
-        <Settings
-          isOpen={showSettings}
-          onClose={() => setShowSettings(false)}
-          onSave={handleSettingsChange}
-          currentSettings={currentSettings || defaultSettings}
-        />
-      </div>
-    </>
+          <div className={styles.sliderSection}>
+            <div className={styles.sliderHeader}>
+              <h3>Number of Players to Rank</h3>
+              <span className={styles.playerCount}>{playerCount} players</span>
+            </div>
+            
+            <div className={styles.sliderContainer}>
+              <span className={styles.sliderLabel}>{currentConfig?.min}</span>
+              <input
+                type="range"
+                min={currentConfig?.min}
+                max={currentConfig?.max}
+                value={playerCount}
+                onChange={handlePlayerCountChange}
+                className={styles.slider}
+              />
+              <span className={styles.sliderLabel}>{currentConfig?.max}</span>
+            </div>
+            
+            <div className={styles.sliderDescription}>
+              <p>
+                Fewer players = quicker ranking, more players = comprehensive depth chart.
+                Recommended: <strong>{currentConfig?.default} players</strong>
+              </p>
+            </div>
+          </div>
+
+          <div className={styles.presetsSection}>
+            <div className={styles.presetsHeader}>
+              <h3>Ranking Intensity</h3>
+              <p>Choose how thorough you want your ranking process to be</p>
+            </div>
+
+            <div className={styles.presetOptions}>
+              {Object.entries(PRESET_CONFIG).map(([key, preset]) => (
+                <label key={key} className={styles.presetOption}>
+                  <input
+                    type="radio"
+                    name="preset"
+                    value={key}
+                    checked={selectedPreset === key}
+                    onChange={() => handlePresetChange(key as 'quick' | 'normal' | 'extensive')}
+                    className={styles.presetRadio}
+                  />
+                  <div className={styles.presetCard}>
+                    <div className={styles.presetIcon}>{preset.icon}</div>
+                    <div className={styles.presetContent}>
+                      <div className={styles.presetName}>{preset.name}</div>
+                      <div className={styles.presetDesc}>{preset.description}</div>
+                    </div>
+                  </div>
+                </label>
+              ))}
+            </div>
+          </div>
+
+          <div className={styles.actionButtons}>
+            <button
+              onClick={() => setTempSelectedPosition('')}
+              className={styles.backButton}
+              disabled={loading}
+            >
+              ← Back to Positions
+            </button>
+            
+            <button
+              onClick={handleStartRanking}
+              disabled={loading}
+              className={styles.startButton}
+            >
+              {loading && selectedPosition === tempSelectedPosition ? 
+                'Loading...' : 
+                `Start ${currentPreset.name} Ranking (${playerCount} ${currentConfig?.name})`
+              }
+            </button>
+          </div>
+        </>
+      )}
+    
+      {error && (
+        <div className={styles.errorMessage}>
+          {error}
+        </div>
+      )}
+    </div>
   );
 };
 

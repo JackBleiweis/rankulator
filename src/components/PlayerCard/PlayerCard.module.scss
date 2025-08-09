@@ -118,19 +118,7 @@
 }
 
 .playerStats {
-  text-align: right;
-
-  strong {
-    display: block;
-    font-size: 14px;
-    font-weight: 700;
-    margin-bottom: 0;
-    color: #495057;
-    padding: 4px 8px;
-    background: rgba(108, 117, 125, 0.1);
-    border-radius: 6px;
-    border: 1px solid rgba(108, 117, 125, 0.15);
-  }
+  display: none; // Hide score counter on all devices
 }
 
 // Final Rankings Card Styles
@@ -154,9 +142,9 @@
   }
 
   &.tier1 {
-    background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
-    border-color: #10b981;
-    border-left: 4px solid #10b981;
+    background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
+    border-color: #16a34a;
+    border-left: 4px solid #16a34a;
   }
 
   &.tier2 {
@@ -178,9 +166,9 @@
   }
 
   &.tier5 {
-    background: linear-gradient(135deg, #fecaca 0%, #fca5a5 100%);
-    border-color: #dc2626;
-    border-left: 4px solid #dc2626;
+    background: linear-gradient(135deg, #fecaca 0%, #f87171 100%);
+    border-color: #b91c1c;
+    border-left: 4px solid #b91c1c;
   }
 
   &.tier6 {
@@ -220,6 +208,7 @@
       font-size: 11px;
       font-weight: bold;
       margin-bottom: 4px;
+      margin-right: 4px;
     }
 
     small {
@@ -266,5 +255,118 @@
     background: rgba(0, 0, 0, 0.05);
     border-radius: 4px;
     display: inline-block;
+  }
+}
+
+// Mobile optimizations
+@media (max-width: 768px) {
+  .rankingCard {
+    padding: 8px;
+    min-height: auto;
+    margin: 4px 0;
+  }
+
+  .cardContent {
+    gap: 8px;
+    align-items: flex-start;
+  }
+
+  .headshot {
+    width: 40px;
+    height: 40px;
+    border-width: 1px;
+  }
+
+  .playerDetails {
+    flex: 1;
+    min-width: 0; // Allow text to wrap
+
+    strong {
+      font-size: 15px;
+      margin-bottom: 4px;
+      width: 100%;
+      line-height: 1.2;
+      word-wrap: break-word;
+    }
+
+    // Stack team badge and player info vertically
+    .teamName {
+      padding: 2px 6px;
+      font-size: 10px;
+      margin-bottom: 2px;
+      display: block;
+      max-width: fit-content;
+    }
+
+    .playerInfo {
+      font-size: 11px;
+      line-height: 1.2;
+
+      // Hide college info on mobile
+      span:first-child {
+        display: none;
+      }
+
+      // Keep years exp and age, but make them more compact
+      span:not(:first-child) {
+        display: inline;
+        margin-right: 6px;
+
+        &:last-child {
+          margin-right: 0;
+        }
+      }
+    }
+  }
+
+  // Final rankings mobile optimizations
+  .finalCard {
+    padding: 12px;
+    margin: 6px 0;
+    border-left-width: 3px;
+  }
+
+  .playerInfo {
+    gap: 8px;
+
+    .playerContent {
+      strong {
+        font-size: 14px;
+        margin-bottom: 2px;
+      }
+
+      .teamName {
+        padding: 1px 4px;
+        font-size: 10px;
+        margin-bottom: 2px;
+      }
+
+      small {
+        font-size: 11px;
+
+        // Hide college info on mobile for final rankings too
+        span:first-child {
+          display: none;
+        }
+      }
+    }
+  }
+
+  .finalHeadshot {
+    width: 36px;
+    height: 36px;
+    border-width: 1px;
+  }
+
+  .playerScore {
+    strong {
+      font-size: 14px;
+      margin-bottom: 2px;
+    }
+
+    .zScore {
+      font-size: 10px;
+      padding: 1px 4px;
+    }
   }
 }

@@ -59,6 +59,30 @@ export class PlayerDataFetcher {
   }
 
   /**
+   * Load players from position-specific JSON file
+   */
+  static async loadPlayersByPositionFile(position: string): Promise<RankulatorPlayer[]> {
+    try {
+      const filename = `${position.toLowerCase()}_all_players.json`;
+      console.log(`Loading ${position} players from ${filename}...`);
+      
+      const response = await fetch(`/data/${filename}`);
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
+      const players: RankulatorPlayer[] = await response.json();
+      console.log(`Loaded ${players.length} ${position} players from ${filename}`);
+      
+      return players;
+    } catch (error) {
+      console.error(`Error loading ${position} players from file:`, error);
+      throw error;
+    }
+  }
+
+  /**
    * Load raw Sleeper data and process it with enhanced fields
    */
   static async loadAndProcessRawData(): Promise<RankulatorPlayer[]> {
@@ -127,12 +151,11 @@ export class PlayerDataFetcher {
   }
   
   /**
-   * Main function to load and return QB data for ranking
+   * Main function to load and return QB data for ranking using position-specific file
    */
   static async getQBsForRanking(count: number = 32): Promise<RankulatorPlayer[]> {
     try {
-      const allPlayers = await this.loadPlayersFromFile();
-      const qbs = this.getTopPlayersByPosition(allPlayers, 'QB', count);
+      const qbs = await this.getPlayersByPosition('QB', count);
       
       console.log(`Returning top ${qbs.length} QBs for ranking:`, qbs.map(qb => qb.name));
       
@@ -161,18 +184,17 @@ export class PlayerDataFetcher {
   }
   
   /**
-   * Get players for any position
+   * Get players for any position using position-specific files
    */
   static async getPlayersByPosition(position: string, count?: number): Promise<RankulatorPlayer[]> {
     try {
-      const allPlayers = await this.loadPlayersFromFile();
-      const filtered = this.filterByPosition(allPlayers, position);
+      const players = await this.loadPlayersByPositionFile(position);
       
       if (count) {
-        return filtered.slice(0, count);
+        return players.slice(0, count);
       }
       
-      return filtered;
+      return players;
     } catch (error) {
       console.error(`Error getting ${position} players:`, error);
       throw error;
@@ -226,6 +248,94 @@ export class PlayerDataFetcher {
       
     } catch (error) {
       console.error('Error regenerating enhanced player data:', error);
+    }
+  }
+
+  /**
+   * Separate players by position and create individual JSON files
+   * Filters out players with null teams
+   */
+  static async separatePlayersByPosition(): Promise<void> {
+    try {
+      console.log('Loading raw Sleeper data to separate by position...');
+      const response = await fetch('/data/sleeper_raw_data.json');
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
+      const rawData: Record<string, SleeperPlayer> = await response.json();
+      console.log(`Loaded ${Object.keys(rawData).length} players from raw Sleeper data`);
+      
+      // Filter and process players
+      const processedPlayers = Object.values(rawData)
+        .filter(player => 
+          player.full_name && 
+          player.position && 
+          player.active && 
+          player.status === 'Active' &&
+          player.team !== null && // Filter out players with null teams
+          ['QB', 'RB', 'WR', 'TE'].includes(player.position)
+        )
+        .map(player => ({
+          id: player.player_id,
+          name: player.full_name,
+          position: player.position,
+          team: player.team,
+          college: player.college || 'Unknown',
+          yearsExp: player.years_exp || 0,
+          age: player.age,
+          active: player.active,
+          searchRank: player.search_rank || 9999999,
+          score: 0,
+          espnId: player.espn_id || null,
+          playerHeadshotLink: player.espn_id 
+            ? `https://a.espncdn.com/combiner/i?img=/i/headshots/nfl/players/full/${player.espn_id}.png&w=350&h=254`
+            : null
+        }));
+
+      // Group players by position
+      const playersByPosition = processedPlayers.reduce((groups, player) => {
+        if (!groups[player.position]) {
+          groups[player.position] = [];
+        }
+        groups[player.position].push(player);
+        return groups;
+      }, {} as Record<string, RankulatorPlayer[]>);
+
+      // Sort each position by search rank
+      Object.keys(playersByPosition).forEach(position => {
+        playersByPosition[position].sort((a, b) => a.searchRank - b.searchRank);
+      });
+
+      console.log('Players by position summary:');
+      Object.entries(playersByPosition).forEach(([position, players]) => {
+        console.log(`${position}: ${players.length} players`);
+      });
+
+      // Create and download separate files for each position
+      for (const [position, players] of Object.entries(playersByPosition)) {
+        const filename = `${position.toLowerCase()}_all_players.json`;
+        const jsonData = JSON.stringify(players, null, 2);
+        const blob = new Blob([jsonData], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = filename;
+        link.click();
+        
+        // Small delay between downloads
+        await new Promise(resolve => setTimeout(resolve, 100));
+        
+        URL.revokeObjectURL(url);
+        console.log(`Downloaded ${filename} with ${players.length} players`);
+      }
+
+      console.log('All position-specific files generated successfully!');
+      
+    } catch (error) {
+      console.error('Error separating players by position:', error);
     }
   }
 }

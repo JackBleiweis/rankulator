@@ -52,17 +52,18 @@ function App() {
   const TOTAL_BATCHES = EXPLORATION_BATCHES + MIXED_BATCHES + REFINEMENT_BATCHES;
 
   // Handle position selection and load player data
-  const handlePositionSelect = async (position: string) => {
+  const handlePositionSelect = async (position: string, playerCount: number, newGameSettings: GameSettings) => {
     setSelectedPosition(position);
     setGamePhase('loading');
     setLoading(true);
     setError('');
     
+    // Update game settings from preset selection
+    setGameSettings(newGameSettings);
+    
     try {
-      let loadedPlayers: Player[] = [];
-      if (position === 'QB') {
-        loadedPlayers = await PlayerDataFetcher.getQBsForRanking(32);
-      }
+      // Load players from position-specific file with custom count
+      const loadedPlayers = await PlayerDataFetcher.getPlayersByPosition(position, playerCount);
       
       const initializedPlayers = loadedPlayers.map(player => ({
         ...player,
@@ -192,8 +193,6 @@ function App() {
           loading={loading}
           selectedPosition={selectedPosition}
           error={error}
-          onSettingsChange={setGameSettings}
-          currentSettings={gameSettings}
         />
       </div>
     );
